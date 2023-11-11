@@ -1,0 +1,52 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+   
+}
+
+body {
+    background: transparent !important;
+    height: 100%;
+}
+
+html {
+    background-image: linear-gradient(180deg, #c80000 0%, #9b0002 50%, #4d0000 100%) !important
+}
+
+h3, h4 {
+    margin-top: 40px !important;
+}
+
+p, li {
+    color: rgb(130, 130, 130);
+}
+
+q {
+    color: yellow;
+}
+
+.cover {
+    width: 100%;
+    height: 500px;
+    overflow: hidden;
+    background-image: url(assets/img/cover.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.main-container {
+    margin: 60px 0;
+    padding: 20px;
+    border-radius: 10px;
+    background: rgb(16, 16, 16);
+    color: white !important;
+    word-break: break-all;
+}
+
+nav {
+    margin: 20px 0 40px 0;
+    background: #4d0000 !important;
+    border-radius: 4px;
+}

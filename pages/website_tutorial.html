@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FB on Dark Web</title>
+
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+
+    <div class="container main-container">
+
+        
+        <!-- Cover Image -->
+        <div class="cover"></div>
+
+
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="#">FB</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link active" href="../pages/website_tutorial.html">Create your website</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+        
+        <h1>Create your own website in the Dark Web</h1>
+
+        <p>
+            Follow this guide for creating your own website.
+            This guide is taken from a public Github repository.
+            <br>
+            Original guide: <a href="https://gist.github.com/98lenvi/4db7d4cabce84abae1d65ac6fa2d6020">https://gist.github.com/98lenvi/4db7d4cabce84abae1d65ac6fa2d6020</a>
+            <br><br>
+
+            <hr>
+
+            
+            <p>As you can see above, I have created my own website in the Tor network, and I&#39;ve accessed it using the Tor Browser.</p>
+            <p>This tutorial consists of three steps </p>
+            <ol>
+            <li>Preparing your computer (Not a step)</li>
+            <li>Installing nginx</li>
+            <li>Installing Tor</li>
+            <li>Setting up the tor server</li>
+            </ol>
+            <h2 id="ingredients">Ingredients</h2>
+            <ul>
+            <li>An old computer 💻</li>
+            <li>A stable internet connection 🌐</li>
+            <li>2 hours ⌚</li>
+            <li>Comfort using terminal ⌨</li>
+            </ul>
+            <h2 id="instructions">Instructions</h2>
+            <p>Find a spare computer that can be used as a server. Unlike the normal internet, you do not need a static IP. You will need to install a Linux based OS on the server,  I have tested the below steps on <strong>Ubuntu 18.04 Server LTS</strong> and recommend that you also use the same.</p>
+            <p>It is also recommended to use SSH to connect to your server since there will be no GUI, you will not be able to open this article on the server and copy-paste the commands. Typing the commands out will be time taking &amp; also very error-prone. </p>
+            <p>I will not explain how to use &amp; configure SSH in this article but you can refer the below to understand &amp; use SSH.</p>
+            <p><a href="https://phoenixnap.com/kb/ssh-to-connect-to-remote-server-linux-or-windows">How To Use SSH To Connect To A Remote Server In Linux Or Windows</a></p>
+            <p>Also, make sure you are running as root throughout the tutorial.</p>
+            <pre><code><span class="hljs-attribute">sudo su</span>
+            </code></pre><p>Let&#39;s get our hands dark 😎</p>
+            <h3 id="installing-nginx">Installing nginx</h3>
+            <p>
+                <code>nginx</code> will serve the HTML files and assets (act as a web server). </p>
+            <pre><code>apt <span class="hljs-keyword">update</span>
+apt <span class="hljs-keyword">install</span> nginx
+            </code></pre><p>The above commands will update &amp; install <code>nginx</code>. To start the <code>nginx</code> server</p>
+            <pre><code>service nginx <span class="hljs-literal">start</span>
+            </code></pre><p>To check the status of the <code>nginx</code> server</p>
+            <pre><code><span class="hljs-attribute">service nginx status</span>
+            </code></pre><p>To confirm if the <code>nginx</code> server is working. We will make a <code>GET</code> request to the server using <code>curl</code>. Before that, you&#39;ll need to know what is your IP address. </p>
+            <pre><code><span class="hljs-attribute">ifconfig</span>
+            </code></pre><p>The output will be similar to this </p>
+            <pre><code>
+lo: flags=<span class="hljs-number">73</span>&lt;UP,LOOPBACK,RUNNING&gt;  mtu <span class="hljs-number">65536</span>
+inet <span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span>  netmask <span class="hljs-number">255.0</span><span class="hljs-number">.0</span><span class="hljs-number">.0</span>
+inet6 ::<span class="hljs-number">1</span>  prefixlen <span class="hljs-number">128</span>  scopeid <span class="hljs-number">0x10</span>&lt;host&gt;
+loop  txqueuelen <span class="hljs-number">1000</span>  (Local Loopback)
+RX packets <span class="hljs-number">134</span>  bytes <span class="hljs-number">21230</span> (<span class="hljs-number">21.2</span> KB)
+RX errors <span class="hljs-number">0</span>  dropped <span class="hljs-number">0</span>  overruns <span class="hljs-number">0</span>  frame <span class="hljs-number">0</span>
+TX packets <span class="hljs-number">134</span>  bytes <span class="hljs-number">21230</span> (<span class="hljs-number">21.2</span> KB)
+TX errors <span class="hljs-number">0</span>  dropped <span class="hljs-number">0</span> overruns <span class="hljs-number">0</span>  carrier <span class="hljs-number">0</span>  collisions <span class="hljs-number">0</span>
+
+wlp9s0: flags=<span class="hljs-number">4163</span>&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu <span class="hljs-number">1500</span>
+inet your-ip-address  netmask <span class="hljs-number">255.255</span><span class="hljs-number">.255</span><span class="hljs-number">.0</span>  broadcast ###.###.#.###
+inet6 ####::####:####:####:####  prefixlen <span class="hljs-number">64</span>  scopeid <span class="hljs-number">0x20</span>&lt;link&gt;
+ether ##:##:##:##:##:##  txqueuelen <span class="hljs-number">1000</span>  (Ethernet)
+RX packets <span class="hljs-number">6379</span>  bytes <span class="hljs-number">8574482</span> (<span class="hljs-number">8.5</span> MB)
+RX errors <span class="hljs-number">0</span>  dropped <span class="hljs-number">0</span>  overruns <span class="hljs-number">0</span>  frame <span class="hljs-number">0</span>
+TX packets <span class="hljs-number">3518</span>  bytes <span class="hljs-number">506008</span> (<span class="hljs-number">506.0</span> KB)
+TX errors <span class="hljs-number">0</span>  dropped <span class="hljs-number">0</span> overruns <span class="hljs-number">0</span>  carrier <span class="hljs-number">0</span>  collisions <span class="hljs-number">0</span>
+            </code></pre><p>Your IP address will be the <code>inet your-IP-address</code> one. Note it down, using that now make a <code>curl</code> request.</p>
+            <pre><code>curl your-IP-<span class="hljs-selector-tag">address</span>:<span class="hljs-number">80</span>
+            </code></pre><p>The console should print out the HTML code of the default <code>nginx</code> page. To add your custom page, follow the steps from their official documentation. You can also check if <code>nginx</code> is working by typing the IP address of the server in your browser.  </p>
+            <p><a href="https://nginx.org/en/docs/beginners_guide.html">Beginner&#39;s guide - nginx</a></p>
+            <h3 id="installing-tor">Installing Tor</h3>
+            <p>Installing Tor (not just the browser) allows your computer to communicate with the Tor network. Before installing Tor, we will have to install <code>apt-transport-https</code>, so that we can use source lines with <code>https://</code></p>
+            <pre><code>apt <span class="hljs-keyword">install</span> apt-transport-https
+            </code></pre><p><strong>Important</strong>: The below commands are for Ubuntu 18.04 only
+            If you are running other OS, please find the commands <a href="https://2019.www.torproject.org/docs/debian.html.en">here, from Tor&#39;s official, site</a>. We will now add the Tor sources to the sources file.</p>
+            <pre><code>touch /etc/apt/sources<span class="hljs-selector-class">.list</span><span class="hljs-selector-class">.d</span>/
+nano /etc/apt/sources<span class="hljs-selector-class">.list</span><span class="hljs-selector-class">.d</span>/
+            </code></pre><p>Once the editor is open, add the following to the file</p>
+            <pre><code><span class="hljs-keyword">deb</span> http<span class="hljs-variable">s:</span>//<span class="hljs-keyword">deb</span>.torproject.org/torproject.org bionic main
+<span class="hljs-keyword">deb</span>-src http<span class="hljs-variable">s:</span>//<span class="hljs-keyword">deb</span>.torproject.org/torproject.org bionic main
+            </code></pre><p>After exit &amp; saving, type the following in the terminal. This is to add the gpg key used to sign the Tor packages.</p>
+            <pre><code>curl https://deb.torproject<span class="hljs-meta">.org</span>/torproject<span class="hljs-meta">.org</span>/A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89.asc | gpg --import
+gpg --export A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89 | apt-key <span class="hljs-keyword">add</span> -
+            </code></pre><p>Finally, now we install Tor and also a package which will help to keep the signing key current.</p>
+            <pre><code>apt update
+apt install tor deb<span class="hljs-selector-class">.torproject</span><span class="hljs-selector-class">.org-keyring</span>
+            </code></pre><p>Similar to <code>nginx</code>, Tor can be started &amp; checked by the following commands</p>
+            <pre><code>service nginx <span class="hljs-keyword">start</span>
+service nginx <span class="hljs-keyword">status</span>
+            </code></pre><h3 id="setting-up-the-tor-server">Setting up the tor server</h3>
+            <p>Now that we have <code>nginx</code> &amp; Tor up and running, we will have to configure Tor so that our server acts as a Tor server <strong>(Your server will not be used as a relay node)</strong> </p>
+            <p>We will have to edit the <code>torrc</code> file.</p>
+            <pre><code>nano <span class="hljs-regexp">/etc/</span>tor<span class="hljs-regexp">/torrc</span>
+            </code></pre><p>In the <code>torrc</code> file, Go to the middle section and look for the line</p>
+            <pre><code>############### This section is just for location-hidden services ###
+            </code></pre><p>And uncomment the following lines. </p>
+            <pre><code>HiddenServiceDir /var/<span class="hljs-class"><span class="hljs-keyword">lib</span>/<span class="hljs-title">tor</span>/<span class="hljs-title">hidden_service</span>/</span>
+HiddenServicePort <span class="hljs-number">80</span> <span class="hljs-number">127.0</span>.<span class="hljs-number">0.1</span>:<span class="hljs-number">80</span>
+            </code></pre><p>In these lines </p>
+            <ul>
+            <li><code>HiddenServiceDir</code> will tell Tor where to save the private_key &amp; hostname of your Tor website (They are information about your dark website). The private key stored is very important &amp; could be used to impersonate you.</li>
+            <li><code>HiddenServicePort</code> lets you specify a virtual port (that is, what port people accessing the website will think they&#39;re using) and an IP address and port for redirecting connections to this virtual port.</li>
+            </ul>
+            <p>To apply this new configuration, Stop the Tor service and start it again by typing the following commands.</p>
+            <pre><code>service tor <span class="hljs-literal">stop</span>
+service tor <span class="hljs-literal">start</span>
+            </code></pre><p>Now check the status of the tor service to see if the changes are working &amp; valid.</p>
+            <pre><code><span class="hljs-attribute">service tor status</span>
+            </code></pre><p>If things are looking good, proceed to the next step, otherwise, you might have made a mistake in editing the <code>.torrc</code> file.</p>
+            <p>At this point, your dark website must be running. But we don&#39;t know what is the URL, to get it, run the following command</p>
+            <pre><code>cat /var/<span class="hljs-class"><span class="hljs-keyword">lib</span>/<span class="hljs-title">tor</span>/<span class="hljs-title">hidden_service</span>/<span class="hljs-title">hostname</span></span>
+            </code></pre><p>The URL to your all-new dark website will be printed in the console. To test if it&#39;s working</p>
+            <pre><code>curl -v --socks5-hostname <span class="hljs-string">localhost:</span><span class="hljs-number">9050</span> <span class="hljs-string">http:</span><span class="hljs-comment">//your-onion-domain.onion</span>
+            </code></pre><p>The URL is actually <code>your-public-RSA-key.onion</code>. Tor has a different way of identifying websites via their public RSA key.</p>
+            <p>You might notice that the URL generated, is very long and you might be wondering how to create custom domain names (i.e. Custom RSA public key). I will be creating an article on this very soon. </p>
+            <p>Now let&#39;s celebrate on your first dark website 🎉. Also please share your thoughts in the comments 😁</p>
+        </p>
+
+        
+
+    </div> <!-- end of main container -->
+    
+</body>
+</html>
